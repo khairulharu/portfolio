@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Khairul Aswad — Backend Developer in Go</title>
+<meta name="description" content="Khairul Aswad builds Go backends with PostgreSQL, Redis, and Docker. Selected work, experience, and contact. Based in Bali, Indonesia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,600&family=Inter:wght@400;600;700&family=Oswald:wght@300;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4F4F2;
+    --pale:#EFEFEA;
+    --blue:#0000FF;
+    --blue-dark:#0000CC;
+    --ink:#0000AA;
+    --muted:#4040B8;
+    --line:rgba(0,0,255,.28);
+    --line-soft:rgba(0,0,255,.16);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--blue);
+    color:var(--ink);
+    font-family:"Inter", system-ui, sans-serif;
+    font-size:17px;
+    line-height:1.5;
+  }
+  a{color:inherit}
+  a:focus-visible, button:focus-visible{
+    outline:3px solid var(--blue);
+    outline-offset:3px;
+  }
+  .band a:focus-visible, .band button:focus-visible, footer a:focus-visible{
+    outline-color:#FFFFFF;
+  }
+  .skip{
+    position:absolute; left:-9999px; top:0;
+    background:var(--ink); color:#FFFFFF; padding:.6rem 1rem;
+    font-family:"Inter", sans-serif; font-weight:600;
+  }
+  .skip:focus{left:1rem; top:1rem; z-index:10}
+  .column{max-width:1180px; margin:0 auto; background:var(--paper)}
+  .wrap{max-width:1020px; margin:0 auto; padding:0 28px}
+  .display{font-family:"Oswald", "Arial Narrow", sans-serif}
+
+  /* Header: sticky, thin blue rule, small uppercase navigation */
+  header{
+    position:sticky; top:0; z-index:5;
+    background:var(--paper);
+    border-bottom:1px solid var(--blue);
+  }
+  .masthead{
+    display:flex; justify-content:space-between; align-items:baseline; gap:1rem;
+    padding:18px 0 16px; flex-wrap:wrap;
+  }
+  .wordmark{
+    font-family:"Oswald", "Arial Narrow", sans-serif; font-weight:600; font-size:15px;
+    letter-spacing:.14em; text-transform:uppercase; text-decoration:none; color:var(--blue);
+  }
+  nav{display:flex; gap:28px; flex-wrap:wrap}
+  nav a{
+    font-family:"Oswald", "Arial Narrow", sans-serif; font-size:14px; font-weight:600;
+    letter-spacing:.12em; text-transform:uppercase; text-decoration:none; color:var(--blue);
+  }
+  nav a:hover{text-decoration:underline; text-underline-offset:4px}
+
+  /* Hero: centred, one giant condensed display headline in blue */
+  .hero{padding:84px 0 48px; text-align:center}
+  .eyebrow{
+    font-family:"Oswald", "Arial Narrow", sans-serif;
+    font-size:13px; font-weight:600; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--blue); margin:0 0 24px;
+  }
+  .hero h1{
+    font-family:"Oswald", "Arial Narrow", sans-serif;
+    font-size:clamp(64px, 11vw, 140px);
+    line-height:.95; letter-spacing:.005em; font-weight:300;
+    text-transform:uppercase; color:var(--blue);
+    margin:0 auto; max-width:18ch;
+  }
+  .hero .lede{
+    margin:32px auto 0; max-width:60ch; font-size:18px; line-height:1.55;
+  }
+  .hero .lede + .lede{margin-top:14px}
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-top:36px; justify-content:center}
+  .btn{
+    font-family:"Oswald", "Arial Narrow", sans-serif; font-weight:600; font-size:15px;
+    letter-spacing:.08em; text-transform:uppercase;
+    padding:14px 26px; text-decoration:none; border:2px solid var(--blue);
+    display:inline-block; background:transparent; border-radius:0; color:var(--blue);
+  }
+  .btn-primary{background:var(--blue); color:#FFFFFF}
+  .btn-primary:hover{background:var(--blue-dark)}
+  .btn-ghost{background:var(--pale)}
+  .btn-ghost:hover{background:#FFFFFF}
+
+  /* Route strip: real entries from the work, on the light ground */
+  .routes{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    display:grid; grid-template-columns:repeat(3, 1fr);
+  }
+  .route{padding:18px 20px 18px 0; border-right:1px solid var(--line-soft)}
+  .route:last-child{border-right:none; padding-right:0}
+  .route + .route{padding-left:20px}
+  .route code{
+    font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:14px;
+    display:block; margin-bottom:4px; word-break:break-word; color:var(--blue);
+  }
+  .route span{font-size:14px; color:var(--muted)}
+
+  section{padding:64px 0}
+  .band{
+    background:var(--blue);
+    color:#FFFFFF;
+    background-image:radial-gradient(rgba(255,255,255,.14) 1px, transparent 1.5px);
+    background-size:14px 14px;
+  }
+  .band h2{color:#FFFFFF}
+  .band .section-intro{color:#FFFFFF}
+  h2{
+    font-family:"Oswald", "Arial Narrow", sans-serif;
+    font-size:clamp(44px, 6vw, 68px);
+    line-height:1; letter-spacing:.01em; margin:0 0 12px; font-weight:500; text-transform:uppercase; color:var(--blue);
+  }
+  .section-intro{max-width:60ch; margin:0 0 36px}
+  .section-intro p{margin:0}
+
+  /* How I work: three columns inside the blue band */
+  .principles{display:grid; grid-template-columns:repeat(3, 1fr); gap:36px}
+  .principle h3{
+    font-family:"Bodoni Moda", Didot, "Bodoni MT", Georgia, serif;
+    font-size:30px; line-height:1.1; font-weight:600;
+    margin:0 0 10px;
+  }
+  .principle p{margin:0; max-width:44ch}
+
+  /* Selected work: a ledger. Structure is the information. */
+  .ledger{border-top:2px solid var(--blue)}
+  .entry{
+    display:grid; grid-template-columns:170px 1fr 150px; gap:28px;
+    padding:32px 0; border-bottom:1px solid var(--line); align-items:start;
+  }
+  .entry:hover, .entry:focus-within{background:var(--pale)}
+  .entry-meta{font-size:14px; line-height:1.55; color:var(--muted)}
+  .entry-meta strong{display:block; color:var(--ink); font-weight:700; font-size:15px}
+  .entry h3{
+    font-family:"Bodoni Moda", Didot, "Bodoni MT", Georgia, serif;
+    font-size:32px; line-height:1.1;
+    margin:0 0 8px; font-weight:600; letter-spacing:-.01em; color:var(--blue);
+  }
+  .entry p{margin:0; max-width:64ch}
+  .entry ul{margin:12px 0 0; padding-left:20px; max-width:64ch}
+  .entry li{margin-bottom:4px}
+  .entry-link{
+    font-weight:600; font-size:15px;
+    text-decoration:underline; text-underline-offset:4px; text-decoration-color:var(--blue);
+    text-decoration-thickness:2px; white-space:nowrap; color:var(--blue);
+  }
+  .entry-link:hover{text-decoration-color:var(--ink)}
+  .no-link{font-size:14px; color:var(--muted)}
+  .ledger-foot{padding:20px 0 0; font-size:15px; color:var(--muted)}
+  .ledger-foot a{text-decoration:underline; text-underline-offset:3px}
+
+  /* Latest on GitHub: loaded live, same ledger shape as selected work */
+  .latest-status{font-size:15px; color:var(--muted); margin:0 0 8px}
+  .latest-list{border-top:2px solid var(--blue)}
+  .latest-entry{
+    display:grid; grid-template-columns:170px 1fr 150px; gap:28px;
+    padding:28px 0; border-bottom:1px solid var(--line); align-items:start;
+  }
+  .latest-entry h3{
+    font-family:"Bodoni Moda", Didot, "Bodoni MT", Georgia, serif;
+    font-size:28px; line-height:1.1;
+    margin:0 0 8px; font-weight:600; letter-spacing:-.01em; color:var(--blue); overflow-wrap:anywhere;
+  }
+  .latest-entry p{margin:0; max-width:64ch}
+  .latest-meta{font-size:14px; line-height:1.55; color:var(--muted)}
+  .latest-meta strong{display:block; color:var(--ink); font-weight:700; font-size:15px}
+
+  /* Experience: a timeline, because this content is a sequence */
+  .timeline{border-top:2px solid var(--blue)}
+  .job{
+    display:grid; grid-template-columns:170px 1fr; gap:28px;
+    padding:28px 0 28px 22px; border-bottom:1px solid var(--line);
+    border-left:3px solid var(--blue); margin-left:6px;
+  }
+  .job-date{font-size:15px; font-weight:600; color:var(--blue)}
+  .job h3{
+    font-family:"Bodoni Moda", Didot, "Bodoni MT", Georgia, serif;
+    font-size:28px; line-height:1.15;
+    margin:0 0 4px; font-weight:600; color:var(--blue);
+  }
+  .job .org{font-size:16px; color:var(--muted); margin:0 0 10px}
+  .job p, .job ul{margin:0; max-width:64ch}
+  .job ul{padding-left:20px; margin-top:8px}
+  .job li{margin-bottom:4px}
+  .education{
+    margin-top:36px; background:var(--pale); padding:28px;
+    display:grid; grid-template-columns:170px 1fr; gap:28px;
+  }
+  .education h3{
+    font-family:"Bodoni Moda", Didot, "Bodoni MT", Georgia, serif;
+    font-size:24px; margin:0 0 6px; font-weight:600; color:var(--blue);
+  }
+  .education p{margin:0; max-width:64ch}
+  .education .label{font-size:15px; font-weight:600; color:var(--blue)}
+
+  /* Stack: a definition ledger */
+  .stack-grid{display:grid; grid-template-columns:1fr 1fr; gap:0; border-top:2px solid var(--blue)}
+  .stack-row{
+    display:grid; grid-template-columns:150px 1fr; gap:20px;
+    padding:20px 0; border-bottom:1px solid var(--line);
+  }
+  .stack-row:nth-child(odd){padding-right:28px}
+  .stack-row:nth-child(even){padding-left:28px; border-left:1px solid var(--line-soft)}
+  .stack-row dt{font-weight:700; font-size:16px; color:var(--blue)}
+  .stack-row dd{margin:0}
+
+  /* Contact: a blue band, one clear next step */
+  .contact h2{font-size:clamp(44px, 6vw, 68px); max-width:18ch}
+  .contact-list{list-style:none; margin:32px 0 0; padding:0; border-top:2px solid #FFFFFF}
+  .contact-list li{
+    display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap;
+    padding:16px 0; border-bottom:1px solid rgba(255,255,255,.35);
+    font-size:17px;
+  }
+  .contact-list a{font-weight:600; text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:2px; word-break:break-all}
+  .copy-btn{
+    font-weight:600; font-size:14px;
+    border:2px solid #FFFFFF; background:transparent; color:#FFFFFF;
+    padding:8px 14px; cursor:pointer; border-radius:0;
+  }
+  .copy-btn:hover{background:rgba(255,255,255,.14)}
+
+  footer{
+    background:var(--blue-dark); color:#FFFFFF;
+    padding:24px 0 36px; display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap;
+    font-size:14px;
+  }
+  footer .wrap{display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; width:100%}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+  }
+
+  @media (max-width: 860px){
+    .routes{grid-template-columns:1fr}
+    .route{border-right:none; border-bottom:1px solid var(--line-soft); padding:16px 0}
+    .route:last-child{border-bottom:none}
+    .route + .route{padding-left:0}
+    .principles{grid-template-columns:1fr; gap:28px}
+    .entry{grid-template-columns:1fr; gap:10px}
+    .latest-entry{grid-template-columns:1fr; gap:10px}
+    .job{grid-template-columns:1fr; gap:6px}
+    .education{grid-template-columns:1fr; gap:10px}
+    .stack-grid{grid-template-columns:1fr}
+    .stack-row:nth-child(even){padding-left:0; border-left:none}
+    .stack-row:nth-child(odd){padding-right:0}
+    .hero{padding:60px 0 40px}
+    .hero h1{font-size:clamp(56px, 14vw, 84px)}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#work">Skip to selected work</a>
+
+<div class="column">
+<header>
+  <div class="wrap masthead">
+    <a class="wordmark" href="#top">Khairul Aswad</a>
+    <nav aria-label="Sections">
+      <a href="#work">Work</a>
+      <a href="#experience">Experience</a>
+      <a href="#stack">Stack</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero wrap">
+    <p class="eyebrow">Backend developer in Go, Bali, Indonesia</p>
+    <h1>Go backends, built to be read, tested, and run.</h1>
+    <p class="lede">I am Khairul Aswad, a backend developer working in Go. I came from networks into software, and I build the parts users never see: APIs, data models, and the tests that prove they hold up. Based in Bali, Indonesia, and open to relocating for the right backend role.</p>
+    <p class="lede">Currently building in Go, PostgreSQL, Redis, and Docker. The work below is linked to its repository wherever one exists.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="mailto:khairulaswad719@gmail.com">Email Khai</a>
+      <a class="btn btn-ghost" href="https://github.com/khairulharu" target="_blank" rel="noopener">Open GitHub</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="routes" aria-label="Entries from current work">
+      <div class="route"><code>GEOSEARCH radius 1 km</code><span>sos-allert-be, Redis geospatial</span></div>
+      <div class="route"><code>POST /topup/initialize</code><span>ewallet, Go and Fiber</span></div>
+      <div class="route"><code>migrate up, then seed</code><span>stockflow-test, PostgreSQL</span></div>
+    </div>
+  </div>
+
+  <section class="band" aria-labelledby="how-heading">
+    <div class="wrap">
+      <h2 id="how-heading">How I work</h2>
+      <div class="section-intro"><p>Three habits, each tied to a project below. If a habit does not show up in the work, it does not belong here.</p></div>
+      <div class="principles">
+        <div class="principle">
+          <h3>Start from the data model</h3>
+          <p>In the SOS alert backend, a user location is stored once, as a Redis geospatial entry, and the database is only hit when an alert is actually triggered. The shape of the data decides what the rest of the system has to do.</p>
+        </div>
+        <div class="principle">
+          <h3>Test the hard part first</h3>
+          <p>Distance, expiry, and filtering are where the SOS feature can quietly go wrong, so the repository and use case tests come before the notification gateway. The gateway starts as a stub that logs its recipients, and the real provider comes later.</p>
+        </div>
+        <div class="principle">
+          <h3>Keep the surface small</h3>
+          <p>The e-wallet API is split into clean-architecture layers so a top-up, a transfer, and an email notification can each change without pulling the others apart. Small surfaces are easier to review, and easier to trust.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" aria-labelledby="work-heading">
+    <div class="wrap">
+      <h2 id="work-heading">Selected work</h2>
+      <div class="section-intro"><p>Newest first. Every repository link goes to the code as it stands on GitHub. Client work without a public repository is marked as such.</p></div>
+      <div class="ledger">
+
+        <article class="entry">
+          <div class="entry-meta"><strong>2026</strong>Go, Redis, PostgreSQL, Svelte</div>
+          <div>
+            <h3>SOS Alert backend</h3>
+            <p>A realtime SOS feature that notifies users within 1 km of an alert, shows the reporter location, and records triggered alerts for audit.</p>
+            <ul>
+              <li>Redis geospatial storage with GEOSEARCH for nearby users, replacing a Haversine check in the use case.</li>
+              <li>Filtering for inactive users, with alert records kept in the database only when an alert is triggered.</li>
+            </ul>
+          </div>
+          <div><a class="entry-link" href="https://github.com/khairulharu/sos-allert-be" target="_blank" rel="noopener">View repo</a></div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-meta"><strong>2026</strong>Go, PostgreSQL, Docker</div>
+          <div>
+            <h3>Stockflow test</h3>
+            <p>A Go backend for products, stock movements, and sales orders, run locally with Docker Compose and PostgreSQL.</p>
+            <ul>
+              <li>Database migrations with golang-migrate, plus seed data for products.</li>
+              <li>Product search using the latest movement time from stock movements.</li>
+            </ul>
+          </div>
+          <div><a class="entry-link" href="https://github.com/khairulharu/stockflow-test" target="_blank" rel="noopener">View repo</a></div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-meta"><strong>2025–2026</strong>Svelte, Go, Tarantool, ClickHouse</div>
+          <div>
+            <h3>Sales and inventory, CV Bersyukur Nalar Luas</h3>
+            <p>A tailored sales and inventory web solution built to match the business process, with a Svelte frontend and a Golang backend.</p>
+            <ul>
+              <li>Custom template engine, MVC architecture, and a custom ORM built with in-house libraries.</li>
+              <li>Tarantool for high-performance operations, and ClickHouse logging every data change in real time for analytics and auditing.</li>
+            </ul>
+          </div>
+          <div><span class="no-link">Client work, no public repo</span></div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-meta"><strong>2023</strong>Go, Fiber, PostgreSQL</div>
+          <div>
+            <h3>E-Wallet API</h3>
+            <p>An e-wallet service in Go using clean architecture, with top-up, transfer, login, and transaction notifications.</p>
+            <ul>
+              <li>PIN-based authentication and a custom token-based system for sessions and API security.</li>
+              <li>SMTP email notifications for transactions and account activity.</li>
+            </ul>
+          </div>
+          <div><a class="entry-link" href="https://github.com/khairulharu/ewallet" target="_blank" rel="noopener">View repo</a></div>
+        </article>
+
+        <article class="entry">
+          <div class="entry-meta"><strong>2024</strong>Go, Testify</div>
+          <div>
+            <h3>Shipping provider, TokoBapak</h3>
+            <p>A shipping-provider feature that calculates cost from weight and distance, built with dependency injection and unit tests.</p>
+            <ul>
+              <li>Geospatial distance calculation with the Haversine formula.</li>
+              <li>Unit tests for every developed feature, written with Testify.</li>
+            </ul>
+          </div>
+          <div><a class="entry-link" href="https://github.com/khairulharu/mock-shipping-provider" target="_blank" rel="noopener">View repo</a></div>
+        </article>
+
+      </div>
+      <p class="ledger-foot">More on GitHub, including learning repositories: <a href="https://github.com/khairulharu?tab=repositories" target="_blank" rel="noopener">golang-redis-api-example, golang-rabbitmq, and simplebank</a>.</p>
+    </div>
+  </section>
+
+  <section id="latest" aria-labelledby="latest-heading">
+    <div class="wrap">
+      <h2 id="latest-heading">Latest on GitHub</h2>
+      <div class="section-intro"><p>This section loads the newest public repositories from GitHub every time the page opens. It does not change the selected work above. Each paragraph uses that repository's own description or README, plus its language and last push date. If a repository has no description or README, the paragraph says only what GitHub records about it.</p></div>
+      <p class="latest-status" id="latest-status">Loading the newest repositories from GitHub...</p>
+      <div class="latest-list" id="latest-list"></div>
+      <noscript><p>JavaScript is off, so the newest repositories cannot load here. See all repositories on <a href="https://github.com/khairulharu?tab=repositories" target="_blank" rel="noopener">GitHub</a>.</p></noscript>
+    </div>
+  </section>
+
+  <section id="experience" aria-labelledby="experience-heading">
+    <div class="wrap">
+      <h2 id="experience-heading">Experience</h2>
+      <div class="section-intro"><p>As listed on my resume. Percentages below are the resume figures for that work.</p></div>
+      <div class="timeline">
+
+        <article class="job">
+          <div class="job-date">Apr 2025 – May 2026</div>
+          <div>
+            <h3>Junior Software Engineer</h3>
+            <p class="org">CV Bersyukur Nalar Luas, Bali, Indonesia</p>
+            <ul>
+              <li>Built the sales and inventory frontend in Svelte v4, integrated with a Golang backend through a custom template engine.</li>
+              <li>Delivered a web solution matched to the business process, with a 10% increase in key performance metrics.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="job">
+          <div class="job-date">Aug 2024 – Jan 2025</div>
+          <div>
+            <h3>Frontend Developer, freelance</h3>
+            <p class="org">Bone, Indonesia</p>
+            <ul>
+              <li>Built an Islamic boarding school website in Next.js and Contentful, with a blog and dynamic content management, helping increase registrations by 20%.</li>
+              <li>Designed and developed a tailoring business website to showcase sewing work and support advertising, and managed a WordPress site for a national investment project.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="job">
+          <div class="job-date">Apr 2024 – Jul 2024</div>
+          <div>
+            <h3>Junior Software Engineer</h3>
+            <p class="org">PT Enigma Creative Indonesia, remote</p>
+            <ul>
+              <li>Assisted in developing a SQL firewall tool to prevent database attacks such as SQL injection.</li>
+              <li>Designed and implemented security measures that reduced potential attack vectors by 40%.</li>
+            </ul>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="education">
+        <div class="label">Education</div>
+        <div>
+          <h3>State Vocational High School 1 Bone, Indonesia</h3>
+          <p>High School Diploma in Computer and Network Engineering, May 2020 – Aug 2023. Coursework: networking, programming, web development, and design.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stack" aria-labelledby="stack-heading">
+    <div class="wrap">
+      <h2 id="stack-heading">Stack</h2>
+      <div class="section-intro"><p>What I have used in the work above, and in current learning repositories. Nothing here is a claim about a tool I have not touched.</p></div>
+      <dl class="stack-grid">
+        <div class="stack-row"><dt>Languages</dt><dd>Golang, JavaScript, Dart</dd></div>
+        <div class="stack-row"><dt>Frameworks</dt><dd>Svelte, React, Next.js, Fiber, Flutter</dd></div>
+        <div class="stack-row"><dt>Databases</dt><dd>PostgreSQL, MySQL, Tarantool, ClickHouse, Redis</dd></div>
+        <div class="stack-row"><dt>Tools</dt><dd>Git, Docker, RabbitMQ, VS Code, Windsurf</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section id="contact" class="band contact" aria-labelledby="contact-heading">
+    <div class="wrap">
+      <h2 id="contact-heading">Hiring for a backend Go role? Start with the repos, then write to me.</h2>
+      <ul class="contact-list">
+        <li><span>Email</span><span><a href="mailto:khairulaswad719@gmail.com">khairulaswad719@gmail.com</a> <button class="copy-btn" type="button" data-email="khairulaswad719@gmail.com">Copy email</button></span></li>
+        <li><span>GitHub</span><a href="https://github.com/khairulharu" target="_blank" rel="noopener">github.com/khairulharu</a></li>
+        <li><span>LinkedIn</span><a href="https://linkedin.com/in/khairulaswad/" target="_blank" rel="noopener">linkedin.com/in/khairulaswad</a></li>
+        <li><span>Phone</span><a href="tel:+628985277576">+62 898-5277-576</a></li>
+        <li><span>Based in</span><span>Bali, Indonesia</span></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Khairul Aswad, 2026. One HTML file, no tracking.</span>
+    <span>sos-allert-be is published under Apache License 2.0.</span>
+  </div>
+</footer>
+</div>
+
+<script>
+  document.querySelectorAll(".copy-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var email = btn.getAttribute("data-email");
+      var done = function () {
+        btn.textContent = "Copied";
+        setTimeout(function () { btn.textContent = "Copy email"; }, 2000);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(email).then(done, done);
+      } else { done(); }
+    });
+  });
+
+  /* Latest on GitHub: fetch the newest public repos on every page load.
+     Text comes only from the repo itself (description / README) plus
+     language, stars and last-updated date. DOM APIs only, so repo text
+     is never inserted as HTML. */
+  (function () {
+    var listEl = document.getElementById("latest-list");
+    var statusEl = document.getElementById("latest-status");
+    if (!listEl || !statusEl) { return; }
+
+    function fetchWithTimeout(url, headers, ms) {
+      var controller = new AbortController();
+      var timer = setTimeout(function () { controller.abort(); }, ms);
+      return fetch(url, { headers: headers, signal: controller.signal })
+        .finally(function () { clearTimeout(timer); });
+    }
+
+    function cleanText(text) {
+      return String(text || "")
+        .replace(/```[\s\S]*?```/g, " ")
+        .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+        .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/[#>*_`~]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function readmeExcerpt(text) {
+      var lines = String(text || "").split("\n");
+      var paragraphs = [];
+      var current = [];
+      var inFence = false;
+      function flush() {
+        if (current.length) { paragraphs.push(current.join(" ")); current = []; }
+      }
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i].trim();
+        if (line.startsWith("```")) { inFence = !inFence; continue; }
+        if (inFence) { continue; }
+        if (line.startsWith("#")) { flush(); continue; }
+        if (!line) { flush(); continue; }
+        if (/^(\d+[.)]|[-*])\s/.test(line)) { flush(); continue; }
+        if (/^(func|type|package|import)\s/.test(line)) { continue; }
+        current.push(line);
+        if (current.join(" ").length > 300) { flush(); }
+      }
+      flush();
+      for (var j = 0; j < paragraphs.length; j++) {
+        var cleaned = cleanText(paragraphs[j]);
+        if (cleaned.length < 30 || cleaned.split(/\s+/).length < 8 || cleaned.indexOf("http") === 0) { continue; }
+        return cleaned.length > 260 ? cleaned.slice(0, 257).replace(/\s+\S*$/, "") + "..." : cleaned;
+      }
+      return null;
+    }
+
+    function formatDate(value) {
+      try {
+        return new Date(value).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+      } catch (e) { return value; }
+    }
+
+    /* End a quoted description/README excerpt as its own sentence, so it
+       never runs into the next sentence without a full stop. */
+    function asSentence(text) {
+      var cleaned = String(text || "").replace(/[,;:]+$/, "").trim();
+      if (!cleaned) { return cleaned; }
+      return /[.!?…]$/.test(cleaned) ? cleaned : cleaned + ".";
+    }
+
+    function loadReadme(name) {
+      return fetchWithTimeout(
+        "https://api.github.com/repos/khairulharu/" + encodeURIComponent(name) + "/readme",
+        { "Accept": "application/vnd.github.raw" }, 5000
+      ).then(function (res) {
+        if (!res.ok) { return null; }
+        return res.text();
+      }).then(function (text) {
+        return text ? readmeExcerpt(text) : null;
+      }).catch(function () { return null; });
+    }
+
+    function renderRepo(repo, excerpt) {
+      var article = document.createElement("article");
+      article.className = "latest-entry";
+
+      var meta = document.createElement("div");
+      meta.className = "latest-meta";
+      var lang = document.createElement("strong");
+      lang.textContent = repo.language || "No language listed";
+      meta.appendChild(lang);
+      var activityDate = repo.pushed_at || repo.updated_at;
+      meta.appendChild(document.createTextNode("Pushed " + formatDate(activityDate)));
+      article.appendChild(meta);
+
+      var body = document.createElement("div");
+      var heading = document.createElement("h3");
+      heading.textContent = repo.name;
+      body.appendChild(heading);
+
+      var signals = (repo.name + " " + (repo.description || "") + " " + (excerpt || "")).toLowerCase();
+      var parts = [];
+      if (excerpt) {
+        parts.push(asSentence(excerpt));
+      } else if (repo.description) {
+        var desc = cleanText(repo.description);
+        parts.push(asSentence(desc.length > 260 ? desc.slice(0, 257).replace(/\s+\S*$/, "") + "..." : desc));
+      } else {
+        parts.push("A " + (repo.language || "software") + " project called " + repo.name + ".");
+      }
+      var context = "Main language: " + (repo.language || "not listed on GitHub") +
+        ". Last pushed " + formatDate(activityDate) + ". " +
+        repo.stargazers_count + " " + (repo.stargazers_count === 1 ? "star" : "stars") + " on GitHub.";
+      parts.push(context);
+      if (/learn|learning|belajar|example|tutorial|experiment/.test(signals)) {
+        parts.push("The name and notes point to learning or experimenting, rather than a finished product.");
+      }
+      var p = document.createElement("p");
+      p.textContent = parts.join(" ");
+      body.appendChild(p);
+      article.appendChild(body);
+
+      var linkWrap = document.createElement("div");
+      var link = document.createElement("a");
+      link.className = "entry-link";
+      link.href = repo.html_url;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = "View repo";
+      linkWrap.appendChild(link);
+      article.appendChild(linkWrap);
+
+      listEl.appendChild(article);
+    }
+
+    fetchWithTimeout(
+      "https://api.github.com/users/khairulharu/repos?sort=updated&direction=desc&per_page=10",
+      { "Accept": "application/vnd.github+json" }, 8000
+    ).then(function (res) {
+      if (!res.ok) { throw new Error("GitHub list request failed"); }
+      return res.json();
+    }).then(function (repos) {
+      var fresh = (repos || []).filter(function (repo) {
+        return !repo.fork && !repo.archived && repo.name !== "portfolio";
+      }).sort(function (a, b) {
+        /* Sort here, by last push, instead of trusting the order the
+           list arrives in. Rendering waits for every README fetch, so
+           entries can no longer appear in fetch-completion order. */
+        return new Date(b.pushed_at || b.updated_at) - new Date(a.pushed_at || a.updated_at);
+      }).slice(0, 5);
+      if (!fresh.length) {
+        statusEl.textContent = "No public repositories were returned.";
+        return;
+      }
+      return Promise.all(fresh.map(function (repo) {
+        return loadReadme(repo.name);
+      })).then(function (excerpts) {
+        fresh.forEach(function (repo, i) {
+          renderRepo(repo, excerpts[i]);
+        });
+        statusEl.textContent = "Showing the " + fresh.length + " newest repositories, loaded from GitHub just now.";
+      });
+    }).catch(function () {
+      statusEl.textContent = "Could not load the newest repositories right now. The selected work above is unchanged. See all repositories on GitHub: ";
+      var link = document.createElement("a");
+      link.href = "https://github.com/khairulharu?tab=repositories";
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = "github.com/khairulharu";
+      statusEl.appendChild(link);
+      statusEl.appendChild(document.createTextNode("."));
+    });
+  })();
+</script>
+</body>
+</html>
