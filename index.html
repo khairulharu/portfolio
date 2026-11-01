@@ -20,7 +20,15 @@
     --line-soft:rgba(0,0,255,.16);
   }
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth; scroll-padding-top:88px}
+  section[id]{scroll-margin-top:88px}
+  /* Brief arrival animation, only triggered by the smooth-scroll script
+     when a nav link is clicked, so content is never hidden on load. */
+  .section-arriving{animation:section-arrive .65s cubic-bezier(.22,.61,.36,1) both}
+  @keyframes section-arrive{
+    from{opacity:.25; transform:translateY(16px)}
+    to{opacity:1; transform:translateY(0)}
+  }
   body{
     margin:0;
     background:var(--blue);
@@ -67,6 +75,7 @@
     letter-spacing:.12em; text-transform:uppercase; text-decoration:none; color:var(--blue);
   }
   nav a:hover{text-decoration:underline; text-underline-offset:4px}
+  nav a.is-active{text-decoration:underline; text-underline-offset:4px; text-decoration-thickness:2px}
 
   /* Hero: centred, one giant condensed display headline in blue */
   .hero{padding:84px 0 48px; text-align:center}
@@ -246,6 +255,7 @@
 
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto}
+    .section-arriving{animation:none}
   }
 
   @media (max-width: 860px){
@@ -499,6 +509,105 @@
 </div>
 
 <script>
+  /* Smooth section navigation: eased scroll that stops below the sticky
+     header, plus a short fade-and-rise arrival on the target section.
+     Native CSS smooth scroll remains the fallback when JS is off, and
+     prefers-reduced-motion gets an instant jump with no animation. */
+  (function () {
+    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var scrollId = 0;
+    function headerOffset() {
+      var header = document.querySelector("header");
+      return header ? header.getBoundingClientRect().height + 16 : 88;
+    }
+    function easeInOutCubic(t) {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+    function smoothScrollTo(targetY, duration, done) {
+      var id = ++scrollId;
+      if (reduceMotion || duration <= 0) {
+        window.scrollTo(0, targetY);
+        if (done) { done(); }
+        return;
+      }
+      var startY = window.scrollY || window.pageYOffset;
+      var distance = targetY - startY;
+      if (Math.abs(distance) < 2) {
+        if (done) { done(); }
+        return;
+      }
+      var startTime = null;
+      function step(ts) {
+        if (id !== scrollId) { return; }
+        if (startTime === null) { startTime = ts; }
+        var progress = Math.min((ts - startTime) / duration, 1);
+        window.scrollTo(0, startY + distance * easeInOutCubic(progress));
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else if (done) {
+          done();
+        }
+      }
+      requestAnimationFrame(step);
+    }
+    function arrive(section, link) {
+      section.classList.remove("section-arriving");
+      void section.offsetWidth;
+      section.classList.add("section-arriving");
+      document.querySelectorAll("nav a").forEach(function (a) { a.classList.remove("is-active"); });
+      if (link) {
+        link.classList.add("is-active");
+        setTimeout(function () { link.classList.remove("is-active"); }, 1200);
+      }
+    }
+    function offsetTop(target) {
+      return target.getBoundingClientRect().top + (window.scrollY || window.pageYOffset) - headerOffset();
+    }
+    document.addEventListener("animationend", function (ev) {
+      if (ev.target.classList && ev.target.classList.contains("section-arriving")) {
+        ev.target.classList.remove("section-arriving");
+      }
+    });
+    document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+      link.addEventListener("click", function (ev) {
+        var hash = link.getAttribute("href");
+        if (!hash || hash.length <= 1) { return; }
+        var target = document.querySelector(hash);
+        if (!target) { return; }
+        ev.preventDefault();
+        if (target.id === "top") {
+          smoothScrollTo(0, 750);
+          try { history.replaceState(null, "", hash); } catch (e) {}
+          return;
+        }
+        /* Mark the clicked link at once, but play the arrival animation
+           when the scroll lands, so the fade is actually seen. */
+        document.querySelectorAll("nav a").forEach(function (a) { a.classList.remove("is-active"); });
+        if (link.closest("nav")) { link.classList.add("is-active"); }
+        smoothScrollTo(Math.max(offsetTop(target), 0), 750, function () {
+          arrive(target, link);
+          var heading = target.querySelector("h2, h1");
+          if (heading) {
+            heading.setAttribute("tabindex", "-1");
+            heading.focus({ preventScroll: true });
+          }
+          try { history.replaceState(null, "", hash); } catch (e) {}
+        });
+      });
+    });
+    /* Arriving from a shared #work / #contact link: land below the header
+       instead of under it, and play the same arrival animation once. */
+    if (window.location.hash && window.location.hash.length > 1) {
+      var initial = document.querySelector(window.location.hash);
+      if (initial && initial.id !== "top") {
+        setTimeout(function () {
+          window.scrollTo(0, Math.max(offsetTop(initial), 0));
+          arrive(initial, null);
+        }, 60);
+      }
+    }
+  })();
+
   document.querySelectorAll(".copy-btn").forEach(function (btn) {
     btn.addEventListener("click", function () {
       var email = btn.getAttribute("data-email");
